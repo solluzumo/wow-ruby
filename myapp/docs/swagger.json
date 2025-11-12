@@ -1,0 +1,943 @@
+{
+    "swagger": "2.0",
+    "info": {
+        "contact": {}
+    },
+    "paths": {
+        "/api/item/list": {
+            "post": {
+                "description": "Возвращает список предметов с поддержкой пагинации, сортировки, фильтрации и поиска. Поддерживает различные типы предметов: базовые предметы (Item), оружие (Weapon) и броню (Armor)",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Предметы"
+                ],
+                "summary": "Получить список предметов с фильтрацией и пагинацией",
+                "parameters": [
+                    {
+                        "description": "Параметры запроса для фильтрации, сортировки и пагинации",
+                        "name": "request",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/dto.ListRequest"
+                        }
+                    },
+                    {
+                        "type": "string",
+                        "description": "Access token в формате: Bearer {token}",
+                        "name": "Authorization",
+                        "in": "header",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Успешный ответ со списком предметов",
+                        "schema": {
+                            "$ref": "#/definitions/dto.ItemListResponse"
+                        }
+                    },
+                    "400": {
+                        "description": "Неверный формат запроса",
+                        "schema": {
+                            "type": "object",
+                            "additionalProperties": {
+                                "type": "string"
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Предметы не найдены",
+                        "schema": {
+                            "type": "object",
+                            "additionalProperties": {
+                                "type": "string"
+                            }
+                        }
+                    },
+                    "500": {
+                        "description": "Внутренняя ошибка сервера",
+                        "schema": {
+                            "type": "object",
+                            "additionalProperties": {
+                                "type": "string"
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/item/{id}": {
+            "get": {
+                "description": "Возвращает предмет по уникальному ID. Может возвращать базовый предмет (Item), оружие (Weapon) или броню (Armor) в зависимости от типа предмета",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Предметы"
+                ],
+                "summary": "Получить предмет по ID",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "ID предмета",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "Access token в формате: Bearer {token}",
+                        "name": "Authorization",
+                        "in": "header",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Базовый предмет",
+                        "schema": {
+                            "$ref": "#/definitions/dto.ItemDetailResponse"
+                        }
+                    },
+                    "400": {
+                        "description": "Неверный формат ID",
+                        "schema": {
+                            "type": "object",
+                            "additionalProperties": {
+                                "type": "string"
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Предмет не найден",
+                        "schema": {
+                            "type": "object",
+                            "additionalProperties": {
+                                "type": "string"
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/npc/list": {
+            "post": {
+                "description": "Возвращает список НИП с поддержкой пагинации, сортировки, фильтрации и поиска.",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "НИП"
+                ],
+                "summary": "Получить список НИП с фильтрацией и пагинацией",
+                "parameters": [
+                    {
+                        "description": "Параметры запроса для фильтрации, сортировки и пагинации",
+                        "name": "request",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/dto.ListRequest"
+                        }
+                    },
+                    {
+                        "type": "string",
+                        "description": "Access token в формате: Bearer {token}",
+                        "name": "Authorization",
+                        "in": "header",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Успешный ответ со списком НИП",
+                        "schema": {
+                            "$ref": "#/definitions/dto.NpcListResponse"
+                        }
+                    },
+                    "400": {
+                        "description": "Неверный формат запроса",
+                        "schema": {
+                            "type": "object",
+                            "additionalProperties": {
+                                "type": "string"
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "НИП не найдены",
+                        "schema": {
+                            "type": "object",
+                            "additionalProperties": {
+                                "type": "string"
+                            }
+                        }
+                    },
+                    "500": {
+                        "description": "Внутренняя ошибка сервера",
+                        "schema": {
+                            "type": "object",
+                            "additionalProperties": {
+                                "type": "string"
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/npc/{id}": {
+            "get": {
+                "description": "Возвращает НИП по уникальному ID",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "НИП"
+                ],
+                "summary": "Получить НИП по ID",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "ID нип",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "Access token в формате: Bearer {token}",
+                        "name": "Authorization",
+                        "in": "header",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "НИП",
+                        "schema": {
+                            "$ref": "#/definitions/dto.NpcDetailResponse"
+                        }
+                    },
+                    "400": {
+                        "description": "Неверный формат ID",
+                        "schema": {
+                            "type": "object",
+                            "additionalProperties": {
+                                "type": "string"
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "НИП не найден",
+                        "schema": {
+                            "type": "object",
+                            "additionalProperties": {
+                                "type": "string"
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/quest/list": {
+            "post": {
+                "description": "Возвращает список квестов с поддержкой пагинации, сортировки, фильтрации и поиска.",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Квесты"
+                ],
+                "summary": "Получить список квестов с фильтрацией и пагинацией",
+                "parameters": [
+                    {
+                        "description": "Параметры запроса для фильтрации, сортировки и пагинации",
+                        "name": "request",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/dto.ListRequest"
+                        }
+                    },
+                    {
+                        "type": "string",
+                        "description": "Access token в формате: Bearer {token}",
+                        "name": "Authorization",
+                        "in": "header",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Успешный ответ со списком квестов",
+                        "schema": {
+                            "$ref": "#/definitions/dto.QuestListResponse"
+                        }
+                    },
+                    "400": {
+                        "description": "Неверный формат запроса",
+                        "schema": {
+                            "type": "object",
+                            "additionalProperties": {
+                                "type": "string"
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Квест не найдены",
+                        "schema": {
+                            "type": "object",
+                            "additionalProperties": {
+                                "type": "string"
+                            }
+                        }
+                    },
+                    "500": {
+                        "description": "Внутренняя ошибка сервера",
+                        "schema": {
+                            "type": "object",
+                            "additionalProperties": {
+                                "type": "string"
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/quest/{id}": {
+            "get": {
+                "description": "Возвращает квест по уникальному ID",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Квесты"
+                ],
+                "summary": "Получить квест по ID",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "ID квест",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "Access token в формате: Bearer {token}",
+                        "name": "Authorization",
+                        "in": "header",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "квест",
+                        "schema": {
+                            "$ref": "#/definitions/dto.QuestDetailResponse"
+                        }
+                    },
+                    "400": {
+                        "description": "Неверный формат ID",
+                        "schema": {
+                            "type": "object",
+                            "additionalProperties": {
+                                "type": "string"
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "квест не найден",
+                        "schema": {
+                            "type": "object",
+                            "additionalProperties": {
+                                "type": "string"
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/user": {
+            "post": {
+                "description": "Создаёт нового пользователя в системе",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "users"
+                ],
+                "summary": "Создать пользователя",
+                "parameters": [
+                    {
+                        "description": "Данные пользователя",
+                        "name": "input",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/dto.UserCreateRequest"
+                        }
+                    }
+                ],
+                "responses": {
+                    "201": {
+                        "description": "Пользователь успешно создан",
+                        "schema": {
+                            "$ref": "#/definitions/dto.Response"
+                        }
+                    },
+                    "400": {
+                        "description": "Неверный формат данных или пользователь уже существует",
+                        "schema": {
+                            "type": "object",
+                            "additionalProperties": {
+                                "type": "string"
+                            }
+                        }
+                    },
+                    "500": {
+                        "description": "Внутренняя ошибка сервера",
+                        "schema": {
+                            "type": "object",
+                            "additionalProperties": {
+                                "type": "string"
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/user/{id}": {
+            "get": {
+                "description": "Возвращает пользователя по уникальному ID",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "users"
+                ],
+                "summary": "Получить пользователя по ID",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "User ID",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/models.User"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "type": "object",
+                            "additionalProperties": {
+                                "type": "string"
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Not Found",
+                        "schema": {
+                            "type": "object",
+                            "additionalProperties": {
+                                "type": "string"
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/users": {
+            "post": {
+                "description": "Авторизирует пользователя в системе",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "users"
+                ],
+                "summary": "Авторизация пользователя",
+                "parameters": [
+                    {
+                        "description": "Данные пользователя",
+                        "name": "input",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/dto.UserLoginRequest"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Пользователь успешно авторизован",
+                        "schema": {
+                            "$ref": "#/definitions/dto.UserLoginResponse"
+                        }
+                    },
+                    "400": {
+                        "description": "Неверный формат данных",
+                        "schema": {
+                            "type": "object",
+                            "additionalProperties": {
+                                "type": "string"
+                            }
+                        }
+                    },
+                    "500": {
+                        "description": "Внутренняя ошибка сервера",
+                        "schema": {
+                            "type": "object",
+                            "additionalProperties": {
+                                "type": "string"
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    },
+    "definitions": {
+        "dto.ArmorDetailResponse": {
+            "type": "object",
+            "properties": {
+                "armorType": {
+                    "type": "string"
+                },
+                "armorValue": {
+                    "type": "integer"
+                },
+                "durability": {
+                    "type": "integer"
+                },
+                "slot": {
+                    "type": "string"
+                }
+            }
+        },
+        "dto.ItemDetailResponse": {
+            "type": "object",
+            "properties": {
+                "armor": {
+                    "$ref": "#/definitions/dto.ArmorDetailResponse"
+                },
+                "id": {
+                    "type": "integer"
+                },
+                "item_type": {
+                    "type": "string"
+                },
+                "max_stack": {
+                    "type": "integer"
+                },
+                "name": {
+                    "type": "string"
+                },
+                "price": {
+                    "type": "number"
+                },
+                "quest_id": {
+                    "type": "integer"
+                },
+                "quest_name": {
+                    "type": "string"
+                },
+                "rarity": {
+                    "type": "string"
+                },
+                "required_level": {
+                    "type": "integer"
+                },
+                "weapon": {
+                    "$ref": "#/definitions/dto.WeaponDetailResponse"
+                }
+            }
+        },
+        "dto.ItemListResponse": {
+            "type": "object",
+            "properties": {
+                "data": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/models.Item"
+                    }
+                },
+                "page": {
+                    "type": "integer"
+                },
+                "page_size": {
+                    "type": "integer"
+                },
+                "total": {
+                    "type": "integer"
+                },
+                "total_pages": {
+                    "type": "integer"
+                }
+            }
+        },
+        "dto.ListRequest": {
+            "type": "object",
+            "properties": {
+                "filters": {
+                    "type": "object",
+                    "additionalProperties": true
+                },
+                "page": {
+                    "type": "integer"
+                },
+                "page_size": {
+                    "type": "integer"
+                },
+                "search": {
+                    "type": "string"
+                },
+                "sort_by": {
+                    "type": "string"
+                },
+                "sort_order": {
+                    "description": "\"asc\" или \"desc\"",
+                    "type": "string"
+                }
+            }
+        },
+        "dto.NpcDetailResponse": {
+            "type": "object",
+            "properties": {
+                "faction": {
+                    "type": "string"
+                },
+                "health": {
+                    "type": "integer"
+                },
+                "id": {
+                    "type": "integer"
+                },
+                "level": {
+                    "type": "integer"
+                },
+                "location": {
+                    "type": "string"
+                },
+                "mana": {
+                    "type": "integer"
+                },
+                "name": {
+                    "type": "string"
+                },
+                "reaction": {
+                    "type": "string"
+                },
+                "respawn_time": {
+                    "type": "integer"
+                },
+                "tameable": {
+                    "type": "boolean"
+                }
+            }
+        },
+        "dto.NpcListResponse": {
+            "type": "object",
+            "properties": {
+                "data": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/models.Npc"
+                    }
+                },
+                "page": {
+                    "type": "integer"
+                },
+                "page_size": {
+                    "type": "integer"
+                },
+                "total": {
+                    "type": "integer"
+                },
+                "total_pages": {
+                    "type": "integer"
+                }
+            }
+        },
+        "dto.QuestDetailResponse": {
+            "type": "object",
+            "properties": {
+                "difficulty": {
+                    "type": "integer"
+                },
+                "id": {
+                    "type": "integer"
+                },
+                "is_repeatable": {
+                    "type": "boolean"
+                },
+                "name": {
+                    "type": "string"
+                },
+                "quest_level": {
+                    "type": "integer"
+                },
+                "required_character_level": {
+                    "type": "integer"
+                },
+                "reward_money": {
+                    "type": "integer"
+                }
+            }
+        },
+        "dto.QuestListResponse": {
+            "type": "object",
+            "properties": {
+                "data": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/models.Quest"
+                    }
+                },
+                "page": {
+                    "type": "integer"
+                },
+                "page_size": {
+                    "type": "integer"
+                },
+                "total": {
+                    "type": "integer"
+                },
+                "total_pages": {
+                    "type": "integer"
+                }
+            }
+        },
+        "dto.Response": {
+            "type": "object",
+            "properties": {
+                "content": {},
+                "message": {
+                    "type": "string"
+                },
+                "status": {
+                    "type": "integer"
+                }
+            }
+        },
+        "dto.UserCreateRequest": {
+            "type": "object",
+            "properties": {
+                "login": {
+                    "type": "string"
+                },
+                "password": {
+                    "type": "string"
+                }
+            }
+        },
+        "dto.UserLoginRequest": {
+            "type": "object",
+            "properties": {
+                "login": {
+                    "type": "string"
+                },
+                "password": {
+                    "type": "string"
+                }
+            }
+        },
+        "dto.UserLoginResponse": {
+            "type": "object",
+            "properties": {
+                "acess_token": {
+                    "type": "string"
+                },
+                "refresh_token": {
+                    "type": "string"
+                }
+            }
+        },
+        "dto.WeaponDetailResponse": {
+            "type": "object",
+            "properties": {
+                "damage": {
+                    "type": "string"
+                },
+                "durability": {
+                    "type": "integer"
+                },
+                "slot": {
+                    "type": "string"
+                },
+                "speed": {
+                    "type": "number",
+                    "format": "float32"
+                },
+                "weaponType": {
+                    "type": "string"
+                }
+            }
+        },
+        "enums.ItemTypeEnum": {
+            "type": "string",
+            "enum": [
+                "Оружие",
+                "Броня",
+                "Расходуемые"
+            ],
+            "x-enum-varnames": [
+                "WeaponType",
+                "ArmorType",
+                "OtherType"
+            ]
+        },
+        "enums.RarityEnum": {
+            "type": "string",
+            "enum": [
+                "Обычный",
+                "Необычный",
+                "Редкий",
+                "Эпический",
+                "Легендарный"
+            ],
+            "x-enum-varnames": [
+                "CommonRarity",
+                "UncommonRarity",
+                "RareEnumRarity",
+                "EpicRarity",
+                "LegendaryRarity"
+            ]
+        },
+        "models.Item": {
+            "type": "object",
+            "properties": {
+                "id": {
+                    "type": "integer"
+                },
+                "itemType": {
+                    "$ref": "#/definitions/enums.ItemTypeEnum"
+                },
+                "maxStack": {
+                    "type": "integer"
+                },
+                "name": {
+                    "type": "string"
+                },
+                "price": {
+                    "type": "number"
+                },
+                "questId": {
+                    "type": "integer"
+                },
+                "questName": {
+                    "type": "string"
+                },
+                "rarity": {
+                    "$ref": "#/definitions/enums.RarityEnum"
+                },
+                "requiredLevel": {
+                    "type": "integer"
+                }
+            }
+        },
+        "models.Npc": {
+            "type": "object",
+            "properties": {
+                "faction": {
+                    "type": "string"
+                },
+                "health": {
+                    "type": "integer"
+                },
+                "id": {
+                    "type": "integer"
+                },
+                "level": {
+                    "type": "integer"
+                },
+                "location": {
+                    "type": "string"
+                },
+                "mana": {
+                    "type": "integer"
+                },
+                "name": {
+                    "type": "string"
+                },
+                "reaction": {
+                    "type": "string"
+                },
+                "respawnTime": {
+                    "type": "integer"
+                },
+                "tameable": {
+                    "type": "boolean"
+                }
+            }
+        },
+        "models.Quest": {
+            "type": "object",
+            "properties": {
+                "difficulty": {
+                    "type": "integer"
+                },
+                "id": {
+                    "type": "integer"
+                },
+                "name": {
+                    "type": "string"
+                },
+                "questLevel": {
+                    "type": "integer"
+                },
+                "repeatable": {
+                    "type": "boolean"
+                },
+                "requiredCharacterLevel": {
+                    "type": "integer"
+                },
+                "rewardMoney": {
+                    "type": "integer"
+                }
+            }
+        },
+        "models.User": {
+            "type": "object",
+            "properties": {
+                "hash": {
+                    "type": "string"
+                },
+                "id": {
+                    "type": "integer"
+                },
+                "login": {
+                    "type": "string"
+                }
+            }
+        }
+    }
+}
