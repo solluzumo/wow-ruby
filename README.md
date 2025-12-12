@@ -23,7 +23,7 @@ Wow ruby - это проект, нацеленный на помощь игро�
 
 ```bash
 git clone https://github.com/solluzumo/wow-ruby.git
-cd wow-ruby.server
+cd wow-ruby
 git checkout dev
 git pull origin dev
 ```
