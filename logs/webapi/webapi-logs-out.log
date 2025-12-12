@@ -1,0 +1,17 @@
+2025/12/09 08:58:45 Config is loaded.
+2025/12/09 08:58:45 Database is connected.
+2025/12/09 08:58:45 Auth service is connected.
+2025/12/09 08:58:45 Server is created.
+2025/12/09 08:58:45 App is created.
+{"level":"info","time":"2025-12-09T08:59:27.898Z","caller":"pkg/http_logger.go:33","msg":"request started","method":"POST","url":"/api/user/register"}
+{"level":"info","time":"2025-12-09T08:59:27.945Z","caller":"handlers/user_handler.go:93","msg":"http razniza","duration":0.000079107}
+2025/12/09 08:59:27 duration: 79.107µs
+{"level":"info","time":"2025-12-09T08:59:27.945Z","caller":"pkg/http_logger.go:49","msg":"request finished","method":"POST","url":"/api/user/register","status":200,"duration":0.046765176}
+{"level":"info","time":"2025-12-09T08:59:53.906Z","caller":"pkg/http_logger.go:33","msg":"request started","method":"POST","url":"/api/quest/list"}
+DATES  2025-12-09 09:00:27 +0000 UTC 2025-12-09 08:59:53.90640516 +0000 UTC m=+68.645125594
+{"level":"info","time":"2025-12-09T08:59:53.910Z","caller":"pkg/http_logger.go:49","msg":"request finished","method":"POST","url":"/api/quest/list","status":200,"duration":0.003898138}
+{"level":"info","time":"2025-12-09T09:00:17.863Z","caller":"pkg/http_logger.go:33","msg":"request started","method":"POST","url":"/api/quest/list"}
+DATES  2025-12-09 09:00:27 +0000 UTC 2025-12-09 09:00:17.863737774 +0000 UTC m=+92.606958345
+{"level":"info","time":"2025-12-09T09:00:17.865Z","caller":"pkg/http_logger.go:49","msg":"request finished","method":"POST","url":"/api/quest/list","status":200,"duration":0.002104315}
+{"level":"info","time":"2025-12-09T09:00:38.495Z","caller":"pkg/http_logger.go:33","msg":"request started","method":"POST","url":"/api/quest/list"}
+{"level":"info","time":"2025-12-09T09:00:38.495Z","caller":"pkg/http_logger.go:49","msg":"request finished","method":"POST","url":"/api/quest/list","status":401,"duration":0.000185214}

@@ -1,40 +1,95 @@
 services:
-  app:
-    build:
-      context: .
-      dockerfile: testing.dockerfile
-    ports:
-      - "8080:8080"
-    environment:
-      DB_HOST: postgres
-      DB_PORT: 5432
-      DB_USER: postgres
-      DB_PASSWORD: postgres
-      DB_NAME: app_db
-    depends_on:
-      - postgres
-    networks:
-      - app-network
-    restart: unless-stopped
-
-  postgres:
+  auth-postgres:
     image: postgres:17-alpine
     environment:
-      POSTGRES_DB: app_db
-      POSTGRES_USER: postgres
-      POSTGRES_PASSWORD: postgres
+      POSTGRES_USER: auth_user
+      POSTGRES_PASSWORD: auth_pass
+      POSTGRES_DB: auth_db
     ports:
-      - "5432:5432"
+      - "5433:5432"
     volumes:
-      - postgres_data:/var/lib/postgresql/data
-      - ./init:/docker-entrypoint-initdb.d
-    networks:
-      - app-network
-    restart: unless-stopped
+      - auth_pgdata:/var/lib/postgresql/data
+      - ./init/auth-service:/docker-entrypoint-initdb.d
+    networks: [backend]
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U auth_user -d auth_db"]
+      interval: 5s
+      timeout: 3s
+      retries: 5
 
+  webapi-postgres:
+    image: postgres:16
+    environment:
+      POSTGRES_USER: web_user
+      POSTGRES_PASSWORD: web_pass
+      POSTGRES_DB: web_db
+    ports:
+      - "5434:5432"
+    volumes:
+      - webapi_pgdata:/var/lib/postgresql/data
+      - ./init/web-api:/docker-entrypoint-initdb.d
+    networks: [backend]
+
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U web_user -d web_db"]
+      interval: 5s
+      timeout: 3s
+      retries: 5
+
+  auth-service:
+    build:
+      context: .
+      dockerfile: auth/Dockerfile
+    environment:
+      DATABASE_URL: postgres://auth_user:auth_pass@auth-postgres:5432/auth_db?sslmode=disable
+      GRPC_PORT: ":50051"
+      SERVICE_NAME: "auth"
+      TASK_CHANNEL_CAP: 100
+      HASH_WORKERS_COUNT: 4
+    depends_on:
+      auth-postgres:
+        condition: service_healthy
+    ports:
+      - "50051:50051"
+    volumes:
+      - ./logs/auth:/var/log/service
+    command: [
+      "/bin/sh", "-c",
+      "auth-service 2>&1 | tee /var/log/service/auth-logs-out.log"
+    ]
+    networks: [backend]
+    
+
+  webapi-service:
+    build:
+      context: .
+      dockerfile: webapi/Dockerfile
+    environment:
+      DATABASE_URL: postgres://web_user:web_pass@webapi-postgres:5432/web_db?sslmode=disable
+      AUTH_GRPC_ADDR: auth-service:50051
+      HTTP_PORT: "8080"
+      SERVICE_NAME: "webapi"
+    depends_on:
+      auth-postgres:
+        condition: service_healthy
+      auth-service:
+        condition: service_started
+      webapi-postgres:
+        condition: service_healthy
+
+    ports:
+      - "8080:8080"
+    volumes:
+      - ./logs/webapi:/var/log/service
+    command: [
+      "/bin/sh", "-c",
+      "webapi-service 2>&1 | tee /var/log/service/webapi-logs-out.log"
+    ]
+    networks: [backend]
+    
 volumes:
-  postgres_data:
+  auth_pgdata:
+  webapi_pgdata:
 
 networks:
-  app-network:
-    driver: bridge
+  backend:

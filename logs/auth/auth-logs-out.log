@@ -1,0 +1,9 @@
+2025/12/09 08:58:44 База данных подключена.
+2025/12/09 08:58:44 Создан пулл воркеров.
+2025/12/09 08:58:44 Auth Grpc сервер слушает на :50051
+{"level":"info","time":"2025-12-09T08:59:27.900Z","caller":"pkg/grpc_logger.go:46","msg":"gRPC request started","method":"/auth.AuthService/Register","request_id":"1f72871e-7dd0-4adf-b2e5-5d35e9431b96"}
+задача в обработке
+Worker 2 is WOKING
+Worker 2 FINISHED
+{"level":"info","time":"2025-12-09T08:59:27.935Z","caller":"service/user_service.go:81","msg":"Password hashed","duration":0.035662085}
+{"level":"info","time":"2025-12-09T08:59:27.944Z","caller":"pkg/grpc_logger.go:77","msg":"gRPC request finished","method":"/auth.AuthService/Register","request_id":"1f72871e-7dd0-4adf-b2e5-5d35e9431b96","status":"OK","duration":0.044280554}
