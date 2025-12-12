@@ -22,7 +22,7 @@ Wow ruby - это проект, нацеленный на помощь игро�
 Сначала клонируем проект и переключаемся на ветку `dev`:
 
 ```bash
-git clone git@gitlab.com:plebstomsk/wow-ruby.server.git
+git clone https://github.com/solluzumo/wow-ruby.git
 cd wow-ruby.server
 git checkout dev
 git pull origin dev
